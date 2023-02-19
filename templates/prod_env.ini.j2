@@ -1,0 +1,40 @@
+[platformio]
+{% for node in nodes %}
+[env:{{node.name}}]
+platform = ${com.esp32_platform}
+board = esp32dev
+board_build.partitions = min_spiffs.csv
+lib_deps =
+    ${com-esp.lib_deps}
+    ${libraries.rc-switch}
+    ${libraries.ble}
+    ${libraries.wifimanager32}
+    ${libraries.decoder}
+build_flags =
+    ${com-esp.build_flags}
+    '-DZgatewayRF="RF"'
+    '-DZgatewayBT="BT"'
+    '-DLED_RECEIVE=2'
+    '-DLED_RECEIVE_ON=0'
+    '-DMQTT_SERVER="{{mqtt_server}}"'
+    '-DMQTT_USER="{{node.name}}"'
+    '-DMQTT_PASS="{{mqtt_pass}}"'
+    '-DESPWifiManualSetup=true'
+    '-Dwifi_ssid="{{wifi_ssid}}"'
+    '-Dwifi_password="{{wifi_pass}}"'
+    '-Dota_password="{{ota_pass}}"'
+    '-DGateway_Name="{{node.name}}"'
+    '-DPublishOnlySensors=false'
+#        '-DUSE_MAC_AS_GATEWAY_NAME'
+    '-DWifiManager_password="{{ota_pass}}"'
+    '-DBase_Topic="homeassistant/rfgw/"'
+    '-DvalueAsASubject=true'
+;'-Dtime_avoid_duplicate=150' - must be set in user_config.h
+upload_protocol = espota
+upload_port = {{node.ip}}
+upload_flags =
+    --auth="{{ota_pass}}"
+    --port=8266
+    --host_port=8266
+    --progress=False
+{% endfor %}

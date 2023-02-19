@@ -1,0 +1,14 @@
+---
+# defaults file for OMGOTA
+wifi_ssid:
+wifi_pass:
+ota_pass:
+mqtt_server:
+mqtt_pass:
+nodes:
+  - name:
+    ip:
+    mac:
+  - name:
+    ip:
+    mac:
