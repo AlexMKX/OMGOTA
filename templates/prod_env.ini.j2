@@ -12,6 +12,9 @@ lib_deps =
     ${libraries.decoder}
 build_flags =
     ${com-esp.build_flags}
+    {% for option in options %}
+    '{{option}}'
+    {% endfor %}
     '-DZgatewayRF="RF"'
     '-DZgatewayBT="BT"'
     '-DLED_RECEIVE=2'

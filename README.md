@@ -29,4 +29,6 @@ omg-ota.yml
           - name: rfgw-11
             ip: 192.168.0.2
             mac: 94:b9:7e:d5:00:11
+        options:
+            - '-DZmqttDiscovery "HADiscovery"'
 ```
