@@ -13,7 +13,6 @@ roles:
 omg-ota.yml
 ``` 
 - hosts: omg_builder
-  gather_facts: false
   roles:
     - role: OMGOTA
       vars:

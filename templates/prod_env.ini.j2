@@ -1,6 +1,5 @@
 [platformio]
-{% for node in nodes %}
-[env:{{node.name}}]
+[env:{{item.name}}]
 platform = ${com.esp32_platform}
 board = esp32dev
 board_build.partitions = min_spiffs.csv
@@ -12,31 +11,33 @@ lib_deps =
     ${libraries.decoder}
 build_flags =
     ${com-esp.build_flags}
+
     {% for option in options %}
-    '{{option}}'
+'{{option}}'
     {% endfor %}
+    '-DOMG_VERSION="{{ota_timestamp}}"'
     '-DZgatewayRF="RF"'
     '-DZgatewayBT="BT"'
     '-DLED_RECEIVE=2'
     '-DLED_RECEIVE_ON=0'
     '-DMQTT_SERVER="{{mqtt_server}}"'
-    '-DMQTT_USER="{{node.name}}"'
+    '-DMQTT_USER="{{item.name}}"'
     '-DMQTT_PASS="{{mqtt_pass}}"'
     '-DESPWifiManualSetup=true'
     '-Dwifi_ssid="{{wifi_ssid}}"'
     '-Dwifi_password="{{wifi_pass}}"'
     '-Dota_password="{{ota_pass}}"'
-    '-DGateway_Name="{{node.name}}"'
+    '-DGateway_Name="{{item.name}}"'
     '-DPublishOnlySensors=false'
 #        '-DUSE_MAC_AS_GATEWAY_NAME'
     '-DWifiManager_password="{{ota_pass}}"'
     '-DBase_Topic="homeassistant/rfgw/"'
     '-DvalueAsASubject=true'
+    -'Ddiscovery_Topic="discovery"'
 ;'-Dtime_avoid_duplicate=150' - must be set in user_config.h
 upload_protocol = espota
-upload_port = {{node.ip}}
+upload_port = {{item.ip}}
 upload_flags =
     --auth="{{ota_pass}}"
     --port=8266
     --host_port=8266
-{% endfor %}

@@ -1,5 +1,6 @@
 ---
 # defaults file for OMGOTA
+ota_timestamp: "{{ansible_date_time.iso8601}}"
 wifi_ssid:
 wifi_pass:
 ota_pass:

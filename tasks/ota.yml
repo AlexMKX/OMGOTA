@@ -1,0 +1,37 @@
+- tempfile:
+    state: file
+  register: prod_env_ini
+- template:
+    src: "../templates/prod_env.ini.j2"
+    dest: "{{prod_env_ini.path}}"
+
+- docker_container:
+    image: omgota
+    state: started
+    name: omgota
+    entrypoint: /bin/bash
+    command: -c "pio run -d /OpenMQTTGateway --disable-auto-clean -t upload -e {{item.name}}"
+    ports:
+      - "8266:8266/tcp"
+    volumes:
+      - "{{prod_env_ini.path}}:/OpenMQTTGateway/prod_env.ini"
+      - "omgota_cache_root:/root/.platformio"
+      - "omgota_cache_omg:/OpenMQTTGateway/.pio"
+- name: Performing build and OTA upload
+  docker_container_info:
+    name: omgota
+  register: omgota_info
+  until: omgota_info.container.State.Running is not true
+  retries: 50
+  delay: 10
+
+- docker_container_info:
+    name: omgota
+  register: omgota_info
+  failed_when: omgota_info.container.State.ExitCode != 0
+
+- name: Performing container cleanup
+  block:
+    - file:
+        path: "{{prod_env_ini.path}}"
+        state: absent
