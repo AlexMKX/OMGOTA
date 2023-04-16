@@ -13,5 +13,4 @@ nodes:
   - name:
     ip:
     mac:
-options:
-
+options: []

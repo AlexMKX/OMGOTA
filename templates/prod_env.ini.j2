@@ -15,7 +15,6 @@ build_flags =
     {% for option in options %}
 '{{option}}'
     {% endfor %}
-    '-DOMG_VERSION="{{ota_timestamp}}"'
     '-DZgatewayRF="RF"'
     '-DZgatewayBT="BT"'
     '-DLED_RECEIVE=2'
@@ -29,12 +28,11 @@ build_flags =
     '-Dota_password="{{ota_pass}}"'
     '-DGateway_Name="{{item.name}}"'
     '-DPublishOnlySensors=false'
-#        '-DUSE_MAC_AS_GATEWAY_NAME'
     '-DWifiManager_password="{{ota_pass}}"'
-    '-DBase_Topic="homeassistant/rfgw/"'
+    '-DBase_Topic="homeassistant/"'
     '-DvalueAsASubject=true'
     -'Ddiscovery_Topic="discovery"'
-;'-Dtime_avoid_duplicate=150' - must be set in user_config.h
+    -'DZmqttDiscovery="HADiscovery"'
 upload_protocol = espota
 upload_port = {{item.ip}}
 upload_flags =
