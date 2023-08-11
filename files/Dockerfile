@@ -1,9 +1,0 @@
-FROM petewall/platformio:latest
-RUN git clone --depth=1 https://github.com/1technophile/OpenMQTTGateway.git
-RUN pio upgrade
-RUN pio update
-RUN apt-get -y update
-RUN apt-get -y upgrade
-
-#VOLUME /root/.platformio
-#VOLUME /OpenMQTTGateway/.pio

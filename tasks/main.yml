@@ -1,9 +1,12 @@
+- set_fact:
+    release_info: "{{ lookup('ansible.builtin.url','https://api.github.com/repos/1technophile/OpenMQTTGateway/releases/latest') }}"
+
 - tempfile:
     state: directory
   register: build_dir
 
-- copy:
-    src: "files/Dockerfile"
+- template:
+    src: "templates/Dockerfile.j2"
     dest: "{{build_dir.path}}/Dockerfile"
 
 - docker_image:
@@ -12,7 +15,6 @@
     build:
       path: "{{build_dir.path}}"
       dockerfile: Dockerfile
-
 - docker_container:
     name: omgota
     state: absent
@@ -29,27 +31,27 @@
 - include_tasks:
     file: ota.yml
   loop: "{{ nodes|flatten(levels=1) }}"
-
-
-
-- name: Performing image cleanup
-  block:
-    - docker_container:
-        name: omgota
-        state: absent
-        keep_volumes: false
-    - docker_image:
-        name: omgota
-        state: absent
-    - file:
-        path: "{{build_dir.path}}"
-        state: absent
-    - docker_container:
-        name: omgota
-        state: absent
-    - docker_volume:
-        name: omgota_cache_root
-        state: absent
-    - docker_volume:
-        name: omgota_cache_omg
-        state: absent
+  #
+  #
+  #
+  #- name: Performing image cleanup
+  #  block:
+  #    - docker_container:
+  #        name: omgota
+  #        state: absent
+  #        keep_volumes: false
+  #    - docker_image:
+  #        name: omgota
+  #        state: absent
+  #    - file:
+  #        path: "{{build_dir.path}}"
+  #        state: absent
+  #    - docker_container:
+  #        name: omgota
+  #        state: absent
+  #    - docker_volume:
+  #        name: omgota_cache_root
+  #        state: absent
+  #    - docker_volume:
+#        name: omgota_cache_omg
+#        state: absent

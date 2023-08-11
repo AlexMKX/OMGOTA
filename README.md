@@ -23,11 +23,11 @@ omg-ota.yml
         mqtt_pass: 'mqtt server password'
         nodes:
           - name: rfgw-22
-            ip: 192.168.0.1
-            mac: 94:b9:7e:d5:00:22
+            ip: >-
+                {{lookup ("ansible.builtin.pipe","host -4 rfgw-22  | awk '{print $4}' ")}}
           - name: rfgw-11
-            ip: 192.168.0.2
-            mac: 94:b9:7e:d5:00:11
+            ip: >-
+                {{lookup ("ansible.builtin.pipe","host -4 rfgw-11  | awk '{print $4}' ")}}
         options:
             - '-DZmqttDiscovery "HADiscovery"'
 ```

@@ -15,6 +15,7 @@ build_flags =
     {% for option in options %}
 '{{option}}'
     {% endfor %}
+    '-DOMG_VERSION="{{release_info.tag_name}}"'
     '-DZgatewayRF="RF"'
     '-DZgatewayBT="BT"'
     '-DLED_RECEIVE=2'
